@@ -36,12 +36,6 @@ function Dogs() {
   const breedName = breedMatch ? breedMatch[1] : "";
 
   const addItem = async () => {
-    console.log("entrou addItem");
-    console.log("nick", nickname);
-    console.log("age", ageDog);
-    console.log("breed", selectedBreed);
-    console.log("color", selectedColor);
-    console.log("size", selectedSize);
     if (
       nickname !== "" &&
       ageDog !== "" &&
@@ -49,6 +43,7 @@ function Dogs() {
       selectedColor !== "" &&
       selectedSize !== ""
     ) {
+      setLoading(true);
       await addDoc(collection(db, "doglist"), {
         nickname: nickname,
         age: ageDog,
@@ -58,12 +53,14 @@ function Dogs() {
         imageUrl: imageUrl,
         createdAt: Date.now(),
       });
+      setLoading(false);
     }
   };
 
   useEffect(() => {
     const fetchData = async () => {
       try {
+        setLoading(true);
         const response = await fetch("https://dog.ceo/api/breeds/list/all");
         if (!response.ok) {
           throw new Error("Failed to fetch data");
